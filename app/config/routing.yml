@@ -1,0 +1,8 @@
+api:
+    resource: "@CBListAPIBundle/Controller/"
+    type:     annotation
+    prefix:   /api
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
