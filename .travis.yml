@@ -3,6 +3,9 @@ language: php
 
 sudo: false
 
+services:
+    - mysql
+
 cache:
   directories:
     - $HOME/.composer/cache/files
@@ -18,7 +21,7 @@ matrix:
     - php: hhvm
 
 env:
-  - SYMFONY_VERSION="3.2.*" DB=sqlite
+  - SYMFONY_VERSION="3.2.*" DB=mysql
 
 before-install:
   - composer self-update
@@ -26,8 +29,8 @@ before-install:
 install:
   - composer install
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - php bin/console doctrine:schema:create --env=test
   - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
 
 script:
   - phpunit
