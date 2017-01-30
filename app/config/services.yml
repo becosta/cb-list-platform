@@ -1,3 +1,20 @@
 parameters:
 
 services:
+    app.host-repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - CBList\ModelBundle\Entity\Host
+
+    app.category-repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - CBList\ModelBundle\Entity\Category
+
+    app.report-repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - CBList\ModelBundle\Entity\Report
