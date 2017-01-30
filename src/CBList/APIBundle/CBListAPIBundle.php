@@ -30,7 +30,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * @author Benjamin Costa <benjamin.costa.75@gmail.com>
+ * @copyright (c) 2017, Benjamin Costa
+ * @license https://opensource.org/licenses/MIT MIT
  */
-class CBListAPIBundle extends Bundle
-{
-}
+class CBListAPIBundle extends Bundle {}
