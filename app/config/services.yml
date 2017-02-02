@@ -18,3 +18,7 @@ services:
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
             - CBList\ModelBundle\Entity\Report
+
+    app.category-service:
+        class:      CBList\ModelBundle\Service\CategoryService
+        arguments:  ['@doctrine.orm.default_entity_manager', '@app.category-repository']
