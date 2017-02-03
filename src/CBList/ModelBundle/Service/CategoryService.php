@@ -270,32 +270,8 @@ class CategoryService extends CBListService
         return 'get' . ucfirst(strtolower($fieldName));
     }
 
-    private function assertValidInteger($argument)
-    {
-        if (!is_integer($argument)) {
-            throw new \InvalidArgumentException(
-                    'Expected argument of type integer, got' . gettype($argument)
-            );
-        }
-    }
-
-    private function assertStringArgument($argument)
-    {
-        if (!is_string($argument)) {
-            throw new \InvalidArgumentException(
-                    'Expected argument of type string, got' . gettype($argument)
-            );
-        }
-    }
-
     private function assertValidLabel($label)
     {
         Category::assertValidLabel($label);
-//        $this->assertStringArgument($label);
-//        if ($label === '') {
-//            throw new \InvalidArgumentException(
-//                    'Expected category label, got empty string'
-//            );
-//        }
     }
 }

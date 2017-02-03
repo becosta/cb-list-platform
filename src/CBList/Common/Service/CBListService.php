@@ -46,4 +46,22 @@ abstract class CBListService
             );
         }
     }
+
+    protected function assertValidInteger($argument)
+    {
+        if (!is_integer($argument)) {
+            throw new \InvalidArgumentException(
+                    'Expected argument of type integer, got' . gettype($argument)
+            );
+        }
+    }
+
+    protected function assertStringArgument($argument)
+    {
+        if (!is_string($argument)) {
+            throw new \InvalidArgumentException(
+                    'Expected argument of type string, got' . gettype($argument)
+            );
+        }
+    }
 }
