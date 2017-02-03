@@ -232,7 +232,6 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($description))
         ;
         $category->expects($this->never())->method('getId');
-        $category->expects($this->never())->method('setId');
         $category->expects($this->never())->method('setLabel');
         $category->expects($this->never())->method('setDescription');
         $category->expects($this->never())->method('getReports');
@@ -255,7 +254,6 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
 
         $category = $this->createCategoryMock();
         $category->expects($this->never())->method('getId');
-        $category->expects($this->never())->method('setId');
         $category->expects($this->never())->method('getLabel');
         $category->expects($this->never())->method('setLabel');
         $category->expects($this->never())->method('getDescription');
