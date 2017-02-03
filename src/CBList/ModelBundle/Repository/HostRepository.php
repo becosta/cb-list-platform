@@ -26,6 +26,10 @@
 
 namespace CBList\ModelBundle\Repository;
 
+use Darsyn\IP\IP as InetAddress;
+
+use CBList\ModelBundle\Entity\Host;
+
 /**
  * HostRepository
  *
@@ -36,4 +40,48 @@ namespace CBList\ModelBundle\Repository;
 class HostRepository extends CBListRepository
 {
     const SERVICE_NAME = 'app.host-repository';
+
+    const INET_ADDRESS_FIELD = 'inetAddress';
+
+    /**
+     * Returns the Host instance with matching inet address, if any.
+     *
+     * @param InetAddress $inetAddress the address to search for in database
+     *
+     * @return Host the matching Host instance or null
+     */
+    public function findOneByInetAddress(InetAddress $inetAddress)
+    {
+        return $this->findOneBy(array(self::INET_ADDRESS_FIELD => $inetAddress));
+    }
+
+    /**
+     * Check that the given Host instance exists in this repository.
+     *
+     * @param Host $host the host instance to search for
+     *
+     * @return boolean true if the Host instance was found in database, false otherwise
+     */
+    public function exists(Host $host)
+    {
+        return
+                $this->existsId($host->getId()) ||
+                (
+                        null !== $host->getInetAddress() &&
+                        $this->existsInetAddress($host->getInetAddress())
+                )
+        ;
+    }
+
+    /**
+     * Check that an Host instance with matching inet address exists in this repository.
+     *
+     * @param InetAddress $inetAddress the inet address to search for
+     *
+     * @return boolean true if a match was found, false otherwise
+     */
+    public function existsInetAddress(InetAddress $inetAddress)
+    {
+        return null !== $this->findOneByInetAddress($inetAddress);
+    }
 }
