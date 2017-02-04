@@ -40,29 +40,45 @@ use CBList\ModelBundle\Entity\Host;
  */
 class LoadHostData extends AbstractFixture implements OrderedFixtureInterface
 {
+    const HOST_1_INET_ADDRESS = '127.0.0.1';
+
+    const HOST_1_NAME = 'host-instance-1';
+
+    const HOST_2_INET_ADDRESS = '192.168.0.1';
+
+    const HOST_2_NAME = 'host-instance-2';
+
+    const HOST_3_INET_ADDRESS = '192.168.1.100';
+
+    const HOST_3_NAME = 'host-instance-3';
+
+    const HOST_4_INET_ADDRESS = '10.1.1.1';
+
+    const HOST_4_NAME = 'host-instance-4';
+
+    const HOST_5_INET_ADDRESS = '172.16.0.1';
+
+    const HOST_5_NAME = 'host-instance-5';
+
     public function load(ObjectManager $manager)
     {
-        $manager->persist(
-                new Host(array('inetAddress' => new InetAddress('127.0.0.1')))
-        );
-        $manager->persist(
-                new Host(array('inetAddress' => new InetAddress('192.168.0.1')))
-        );
-        $manager->persist(
-                new Host(array('inetAddress' => new InetAddress('192.168.1.100')))
-        );
-        $manager->persist(
-                new Host(array('inetAddress' => new InetAddress('10.1.1.1')))
-        );
-        $manager->persist(
-                new Host(array('inetAddress' => new InetAddress('172.16.0.1')))
-        );
-
+        $this->addHostInstance($manager, self::HOST_1_NAME, self::HOST_1_INET_ADDRESS);
+        $this->addHostInstance($manager, self::HOST_2_NAME, self::HOST_2_INET_ADDRESS);
+        $this->addHostInstance($manager, self::HOST_3_NAME, self::HOST_3_INET_ADDRESS);
+        $this->addHostInstance($manager, self::HOST_4_NAME, self::HOST_4_INET_ADDRESS);
+        $this->addHostInstance($manager, self::HOST_5_NAME, self::HOST_5_INET_ADDRESS);
         $manager->flush();
     }
 
     public function getOrder()
     {
         return 50;
+    }
+
+    private function addHostInstance(ObjectManager $manager, $name, $inetAddress)
+    {
+        $host = new Host(array('inetAddress' => new InetAddress($inetAddress)));
+        $manager->persist($host);
+        $this->addReference($name, $host);
     }
 }

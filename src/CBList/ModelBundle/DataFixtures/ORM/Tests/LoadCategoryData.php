@@ -39,31 +39,57 @@ use CBList\ModelBundle\Entity\Category;
  */
 class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterface
 {
+    const APACHE_BADBOTS_CATEGORY_DESCRIPTION   = 'apache badbots reports';
+
+    const APACHE_BADBOTS_CATEGORY_LABEL         = 'apache-badbots';
+
+    const APACHE_BADBOTS_CATEGORY_NAME          = 'apache-badbots-category';
+
+    const SSH_BRUTEFORCE_CATEGORY_DESCRIPTION   = 'ssh password bruteforce reports';
+
+    const SSH_BRUTEFORCE_CATEGORY_LABEL         = 'ssh-bruteforce';
+
+    const SSH_BRUTEFORCE_CATEGORY_NAME          = 'ssh-bruteforce-category';
+
+    const SSH_DDOS_CATEGORY_DESCRIPTION         = 'ssh ddos reports';
+
+    const SSH_DDOS_CATEGORY_LABEL               = 'ssh-ddos';
+
+    const SSH_DDOS_CATEGORY_NAME                = 'ssh-ddos-category';
+
     public function load(ObjectManager $manager)
     {
-        $category = (new Category())
-                ->setLabel('ssh-bruteforce')
-                ->setDescription('ssh password bruteforce reports')
-        ;
-        $manager->persist($category);
-
-        $category = (new Category())
-                ->setLabel('ssh-ddos')
-                ->setDescription('ssh ddos reports')
-        ;
-        $manager->persist($category);
-
-        $category = (new Category())
-                ->setLabel('apache-badbots')
-                ->setDescription('apache badbots reports')
-        ;
-        $manager->persist($category);
-
+        $this->addCategoryInstance(
+                $manager,
+                self::APACHE_BADBOTS_CATEGORY_NAME,
+                self::APACHE_BADBOTS_CATEGORY_LABEL,
+                self::APACHE_BADBOTS_CATEGORY_DESCRIPTION
+        );
+        $this->addCategoryInstance(
+                $manager,
+                self::SSH_BRUTEFORCE_CATEGORY_NAME,
+                self::SSH_BRUTEFORCE_CATEGORY_LABEL,
+                self::SSH_BRUTEFORCE_CATEGORY_DESCRIPTION
+        );
+        $this->addCategoryInstance(
+                $manager,
+                self::SSH_DDOS_CATEGORY_NAME,
+                self::SSH_DDOS_CATEGORY_LABEL,
+                self::SSH_DDOS_CATEGORY_DESCRIPTION
+        );
         $manager->flush();
     }
 
     public function getOrder()
     {
         return 10;
+    }
+
+    private function addCategoryInstance(
+            ObjectManager $manager, $name, $label, $description
+    ) {
+        $category = new Category(array('label' => $label, 'description' => $description));
+        $manager->persist($category);
+        $this->addReference($name, $category);
     }
 }
