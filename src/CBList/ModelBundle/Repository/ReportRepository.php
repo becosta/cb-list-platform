@@ -26,6 +26,8 @@
 
 namespace CBList\ModelBundle\Repository;
 
+use CBList\ModelBundle\Entity\Report;
+
 /**
  * ReportRepository
  *
@@ -36,4 +38,16 @@ namespace CBList\ModelBundle\Repository;
 class ReportRepository extends CBListRepository
 {
     const SERVICE_NAME = 'app.report-repository';
+
+    /**
+     * Check that the given Report instance exists in this repository.
+     *
+     * @param Report $report the host instance to search for
+     *
+     * @return boolean true if the Report instance was found in database, false otherwise
+     */
+    public function exists(Report $report)
+    {
+        return $this->existsId($report->getId());
+    }
 }
