@@ -26,3 +26,7 @@ services:
     app.category-service:
         class:      CBList\ModelBundle\Service\CategoryService
         arguments:  ['@doctrine.orm.default_entity_manager', '@app.category-repository']
+
+    app.report-service:
+        class:      CBList\ModelBundle\Service\ReportService
+        arguments:  ['@doctrine.orm.default_entity_manager', '@app.report-repository', '@app.host-service', '@app.category-service']
