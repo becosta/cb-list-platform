@@ -26,6 +26,7 @@
 
 namespace CBList\ModelBundle\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -34,6 +35,7 @@ use CBList\ModelBundle\Exception\EntityMismatchException;
 use CBList\ModelBundle\Exception\EntityNotModifiedException;
 use CBList\ModelBundle\Repository\CategoryRepository;
 use CBList\ModelBundle\Service\CBListEntityService;
+use CBList\ModelBundle\Service\ReportService;
 
 /**
  * CategoryService
@@ -213,6 +215,32 @@ class CategoryService extends CBListEntityService
     }
 
     /**
+     * Deletes the given Category instance.
+     *
+     * Note that any report associated with this category
+     * will be kept in database and linked to
+     * a special category with label "deleted-category".
+     *
+     * @param Category $category the Category instance to delete
+     * @param ReportService $reportService
+     * @return Collection a collection of report that have been moved from $category to the special category
+     */
+    public function delete(Category $category, ReportService $reportService)
+    {
+        $deletedCategory = $this->getDeletedCategory();
+        $modifiedReports = $category->getReports();
+        $category->setReports(new ArrayCollection());
+
+        foreach ($modifiedReports as $report) {
+            $report->setCategory($deletedCategory);
+        }
+        $this->entityManager->remove($category);
+        $this->saveAll();
+
+        return $modifiedReports;
+    }
+
+    /**
      * Returns the whole collection of Category instances.
      *
      * @return array the Category instances
@@ -254,6 +282,25 @@ class CategoryService extends CBListEntityService
     {
         $this->assertValidLabel($label);
         return $this->repository->findOneBy(array(self::LABEL_FIELD => $label));
+    }
+
+
+    /**
+     *
+     * @return Category
+     */
+    private function getDeletedCategory()
+    {
+        $category = $this->getCategoryByLabel('deleted-category');
+        if (null === $category) {
+            $category = $this->create(
+                    'deleted-category',
+                    'The original category associated with these reports was deleted'
+            );
+            $this->add($category);
+        }
+        return $category;
+
     }
 
     private function getFieldSetterName($fieldName) {

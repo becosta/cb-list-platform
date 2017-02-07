@@ -32,8 +32,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use CBList\Common\CBListKernelTestCase;
 use CBList\ModelBundle\Entity\Category;
+use CBList\ModelBundle\Entity\Report;
 use CBList\ModelBundle\Repository\CategoryRepository;
 use CBList\ModelBundle\Service\CategoryService;
+use CBList\ModelBundle\Service\ReportService;
 
 /**
  * @author Benjamin Costa <benjamin.costa.75@gmail.com>
@@ -156,6 +158,9 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * TODO: assert that an exception is thrown
+     */
     public function testAddExistingCategory()
     {
         $manager = $this->createEntityManagerMock();
@@ -276,8 +281,8 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getMockBuilder(CategoryService::class)
                 ->setMethods(array('getCategory', 'update'))
                 ->disableOriginalConstructor()
-                ->getMock();
-
+                ->getMock()
+        ;
         $service->expects($this->once())
                 ->method('getCategory')
                 ->with($this->equalTo($id))
@@ -483,7 +488,8 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getMockBuilder(CategoryService::class)
                 ->setMethods(array('getCategory', 'replace'))
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMock()
+        ;
 
         $service->expects($this->once())
                 ->method('getCategory')
@@ -508,7 +514,8 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getMockBuilder(CategoryService::class)
                 ->setMethods(array('getCategory', 'replace'))
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMock()
+        ;
 
         $service->expects($this->once())
                 ->method('getCategory')
@@ -518,6 +525,43 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
         $service->expects($this->never())->method('replace');
 
         $this->assertNull($service->replaceById($id, $newCategory));
+    }
+
+    public function testDelete()
+    {
+        $report = $this->createReportMock();
+        $expectedResult = new ArrayCollection(array($report));
+        $category = $this->createCategoryMock();
+        $deletedCategory = new Category(array('label' => 'deleted-category', 'description' => 'The original category associated with these reports was deleted'));
+        $reportService = $this->createReportServiceMock();
+        $manager = $this->createEntityManagerMock();
+        $categoryService = $this->getMockBuilder(CategoryService::class)
+                ->setMethods(array('getDeletedCategory', 'saveAll'))
+                ->setConstructorArgs(array($manager, $this->createCategoryRepositoryMock()))
+                ->getMock()
+        ;
+
+        $categoryService->expects($this->once())->method('saveAll');
+        $manager->expects($this->once())
+                ->method('remove')
+                ->with($this->equalTo($category))
+        ;
+        $report->expects($this->once())
+                ->method('setCategory')
+                ->with($this->equalTo($deletedCategory))
+        ;
+        $category->expects($this->once())
+                ->method('getReports')
+                ->will($this->returnValue($expectedResult))
+        ;
+        $category->expects($this->once())
+                ->method('setReports')
+                ->with($this->equalTo(new ArrayCollection()))
+        ;
+
+        $actualResult = $categoryService->delete($category, $reportService);
+        $this->assertNotNull($actualResult);
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     public function testGetCategories()
@@ -721,6 +765,28 @@ class CategoryServiceTest extends \PHPUnit_Framework_TestCase
             $repository = $this->createCategoryRepositoryMock();
         }
         return new CategoryService($manager, $repository);
+    }
+
+    /**
+     * @return ReportService
+     */
+    private function createReportServiceMock()
+    {
+        return $this->getMockBuilder(ReportService::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        ;
+    }
+
+    /**
+     * @return ReportService
+     */
+    private function createReportMock()
+    {
+        return $this->getMockBuilder(Report::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        ;
     }
 
     /**
