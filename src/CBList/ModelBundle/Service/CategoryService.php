@@ -29,11 +29,11 @@ namespace CBList\ModelBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 
-use CBList\Common\Service\CBListService;
 use CBList\ModelBundle\Entity\Category;
 use CBList\ModelBundle\Exception\EntityMismatchException;
 use CBList\ModelBundle\Exception\EntityNotModifiedException;
 use CBList\ModelBundle\Repository\CategoryRepository;
+use CBList\ModelBundle\Service\CBListEntityService;
 
 /**
  * CategoryService
@@ -42,23 +42,17 @@ use CBList\ModelBundle\Repository\CategoryRepository;
  * @copyright (c) 2017, Benjamin Costa
  * @license https://opensource.org/licenses/MIT MIT
  */
-class CategoryService extends CBListService
+class CategoryService extends CBListEntityService
 {
 
     const SERVICE_NAME = 'app.category-service';
 
     const LABEL_FIELD = 'label';
 
-    private $entityManager;
-
-    private $repository;
-
     public function __construct(
             EntityManager $entityManager, CategoryRepository $repository
     ) {
-        parent::__construct();
-        $this->entityManager = $entityManager;
-        $this->repository = $repository;
+        parent::__construct($entityManager, $repository);
     }
 
     /**

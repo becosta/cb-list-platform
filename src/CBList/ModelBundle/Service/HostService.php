@@ -29,9 +29,9 @@ namespace CBList\ModelBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Darsyn\IP\IP as InetAddress;
 
-use CBList\Common\Service\CBListService;
 use CBList\ModelBundle\Entity\Host;
 use CBList\ModelBundle\Repository\HostRepository;
+use CBList\ModelBundle\Service\CBListEntityService;
 
 /**
  * Description of HostService
@@ -40,21 +40,16 @@ use CBList\ModelBundle\Repository\HostRepository;
  * @copyright (c) 2017, Benjamin Costa
  * @license https://opensource.org/licenses/MIT MIT
  */
-class HostService extends CBListService
+class HostService extends CBListEntityService
 {
 
     const SERVICE_NAME = 'app.host-service';
 
     const INET_ADDRESS_FIELD = HostRepository::INET_ADDRESS_FIELD;
 
-    private $entityManager;
-
-    private $repository;
-
     public function __construct(EntityManager $entityManager, HostRepository $repository)
     {
-        $this->entityManager = $entityManager;
-        $this->repository = $repository;
+        parent::__construct($entityManager, $repository);
     }
 
     /**

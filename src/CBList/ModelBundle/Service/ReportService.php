@@ -30,14 +30,14 @@ use Doctrine\ORM\EntityManager;
 use DateTime;
 use Darsyn\IP\IP as InetAddress;
 
-use CBList\Common\Service\CBListService;
 use CBList\ModelBundle\Entity\Report;
 use CBList\ModelBundle\Entity\Category;
 use CBList\ModelBundle\Entity\Host;
 use CBList\ModelBundle\Exception\EntityNotFoundException;
 use CBList\ModelBundle\Repository\ReportRepository;
-use CBList\ModelBundle\Service\HostService;
 use CBList\ModelBundle\Service\CategoryService;
+use CBList\ModelBundle\Service\CBListEntityService;
+use CBList\ModelBundle\Service\HostService;
 
 /**
  * Description of ReportService
@@ -46,14 +46,10 @@ use CBList\ModelBundle\Service\CategoryService;
  * @copyright (c) 2017, Benjamin Costa
  * @license https://opensource.org/licenses/MIT MIT
  */
-class ReportService extends CBListService
+class ReportService extends CBListEntityService
 {
 
     const SERVICE_NAME = 'app.report-service';
-
-    private $entityManager;
-
-    private $repository;
 
     private $hostService;
 
@@ -63,8 +59,7 @@ class ReportService extends CBListService
             EntityManager $entityManager, ReportRepository $repository,
             HostService $hostService, CategoryService $categoryService
     ) {
-        $this->entityManager = $entityManager;
-        $this->repository = $repository;
+        parent::__construct($entityManager, $repository);
         $this->hostService = $hostService;
         $this->categoryService = $categoryService;
     }
