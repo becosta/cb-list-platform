@@ -41,6 +41,8 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  UTF8
+        options:
+            1002:  "SET NAMES 'UTF8'"
         types:
             ip: Darsyn\IP\Doctrine\IpType
 
