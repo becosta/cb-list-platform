@@ -37,6 +37,16 @@ use CBList\ModelBundle\Service\CBListEntityService;
  * @copyright (c) 2017, Benjamin Costa
  * @license https://opensource.org/licenses/MIT MIT
  */
+class NoopService extends CBListEntityService
+{
+    const SERVICE_NAME = 'noop-service';
+}
+
+/**
+ * @author Benjamin Costa <benjamin.costa.75@gmail.com>
+ * @copyright (c) 2017, Benjamin Costa
+ * @license https://opensource.org/licenses/MIT MIT
+ */
 class CBListEntityServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testSave()
@@ -72,7 +82,7 @@ class CBListEntityServiceTest extends \PHPUnit_Framework_TestCase
     private function createCBListEntityServiceMock(
             array $methods = array(), array $constructorArguments = array()
     ) {
-        return $this->getMockBuilder(CBListEntityService::class)
+        return $this->getMockBuilder(NoopService::class)
                 ->setMethods($methods)
                 ->setConstructorArgs($constructorArguments)
                 ->getMockForAbstractClass()
