@@ -95,6 +95,9 @@ class Host extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      */
     public function addReport(Report $report)
     {
+        if (null === $this->reports) {
+            $this->setReports(new ArrayCollection());
+        }
         if (!$this->reports->contains($report)) {
             $this->reports->add($report);
         }
