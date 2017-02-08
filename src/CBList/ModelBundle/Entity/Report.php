@@ -28,7 +28,11 @@ namespace CBList\ModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Darsyn\IP\IP as InetAddress;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\MaxDepth;
+
 use CBList\ModelBundle\Entity\Category;
+use CBList\ModelBundle\Entity\Entity;
 
 /**
  * Represent a suspicious behaviour report.
@@ -52,6 +56,8 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var \DateTime
      *
      * @ORM\Column(name="date_submitted", type="datetime")
+     *
+     * @Groups({"list", "report-summary", "summary"})
      */
     private $dateSubmitted;
 
@@ -61,6 +67,8 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var InetAddress
      *
      * @ORM\Column(name="sender_inet_address", type="ip")
+     *
+     * @Groups({"details", "report-details"})
      */
     private $senderInetAddress;
 
@@ -71,6 +79,9 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="reports", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *
+     * @Groups({"report-details"})
+     * @MaxDepth(2)
      */
     private $category;
 
@@ -81,6 +92,9 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      *
      * @ORM\ManyToOne(targetEntity="Host", inversedBy="reports")
      * @ORM\JoinColumn(name="host_id", referencedColumnName="id")
+     *
+     * @Groups({"report-details"})
+     * @MaxDepth(1)
      */
     private $host;
 

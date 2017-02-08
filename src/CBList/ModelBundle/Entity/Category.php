@@ -30,6 +30,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\MaxDepth;
 
 use CBList\ModelBundle\Entity\Report;
 
@@ -53,6 +55,9 @@ class Category extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Report", mappedBy="category")
+     *
+     * @Groups({"category-details"})
+     * @MaxDepth(2)
      */
     private $reports;
 
@@ -62,6 +67,8 @@ class Category extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var string
      *
      * @ORM\Column(name="label", type="string", length=Category::MAX_LABEL_LENGTH, unique=true)
+     *
+     * @Groups({"category-summary", "list", "summary"})
      */
     private $label;
 
@@ -71,6 +78,8 @@ class Category extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     *
+     * @Groups({"category-summary"})
      */
     private $description;
 

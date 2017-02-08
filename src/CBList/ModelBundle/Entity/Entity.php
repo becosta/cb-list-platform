@@ -27,6 +27,7 @@
 namespace CBList\ModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Abstract base class representing an entity.
@@ -49,6 +50,8 @@ abstract class Entity implements CBListEntity
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"details", "id", "list", "summary"})
      */
     protected $id;
 

@@ -30,6 +30,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Darsyn\IP\IP as InetAddress;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\MaxDepth;
+
+use CBList\ModelBundle\Entity\Entity;
 
 /**
  * Represents a network host.
@@ -49,6 +53,9 @@ class Host extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Report", mappedBy="host")
+     *
+     * @Groups({"host-details"})
+     * @MaxDepth(3)
      */
     private $reports;
 
@@ -58,6 +65,8 @@ class Host extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @var InetAddress
      *
      * @ORM\Column(name="inet_address", type="ip", unique=true)
+     *
+     * @Groups({"host-summary", "list", "summary"})
      */
     private $inetAddress;
 
