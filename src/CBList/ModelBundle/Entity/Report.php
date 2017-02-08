@@ -28,6 +28,7 @@ namespace CBList\ModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Darsyn\IP\IP as InetAddress;
+use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\MaxDepth;
 
@@ -69,6 +70,7 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @ORM\Column(name="sender_inet_address", type="ip")
      *
      * @Groups({"details", "report-details"})
+     * @Accessor(getter="getSenderInetAddressAsString",setter="setInetAddress")
      */
     private $senderInetAddress;
 
@@ -150,6 +152,16 @@ class Report extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
     public function getSenderInetAddress()
     {
         return $this->senderInetAddress;
+    }
+
+    /**
+     * Returns the InetAddress this report was submitted from.
+     *
+     * @return InetAddress the InetAddress this report was submitted from
+     */
+    public function getSenderInetAddressAsString()
+    {
+        return (string)$this->senderInetAddress->getShortAddress();
     }
 
     /**

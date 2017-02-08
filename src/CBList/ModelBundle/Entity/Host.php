@@ -30,6 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Darsyn\IP\IP as InetAddress;
+use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\MaxDepth;
 
@@ -67,6 +68,7 @@ class Host extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
      * @ORM\Column(name="inet_address", type="ip", unique=true)
      *
      * @Groups({"host-summary", "list", "summary"})
+     * @Accessor(getter="getInetAddressAsString", setter="setInetAddress")
      */
     private $inetAddress;
 
@@ -143,6 +145,16 @@ class Host extends \CBList\ModelBundle\Entity\Entity implements CBListEntity
     public function getInetAddress()
     {
         return $this->inetAddress;
+    }
+
+    /**
+     * Returns this instance's network address.
+     *
+     * @return string this instance's network address
+     */
+    public function getInetAddressAsString()
+    {
+        return (string)$this->inetAddress->getShortAddress();
     }
 
     /**
